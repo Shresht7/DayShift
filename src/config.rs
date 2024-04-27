@@ -1,23 +1,21 @@
-// Library
-use crate::time;
-
 // External Library
+use chrono::NaiveTime;
 use serde::Deserialize;
 
 /// Configuration for the application
 #[derive(Deserialize, Debug)]
 #[serde(default)]
 pub struct Config {
-    pub start: u32,
-    pub end: u32,
+    pub start: NaiveTime,
+    pub end: NaiveTime,
 }
 
 // Default Configuration Values
 impl Default for Config {
     fn default() -> Config {
         Config {
-            start: 0,
-            end: time::SECONDS_IN_DAY,
+            start: NaiveTime::from_hms_opt(0, 0, 0).unwrap_or_default(),
+            end: NaiveTime::from_hms_opt(23, 59, 59).unwrap_or_default(),
         }
     }
 }

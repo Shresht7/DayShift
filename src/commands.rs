@@ -4,9 +4,6 @@ use crate::helpers;
 use crate::time;
 use crate::wallpaper;
 
-// External Library
-use chrono::{Local, Timelike};
-
 // ---
 // GET
 // ---
@@ -40,7 +37,6 @@ pub fn set(args: Vec<String>) {
 
     // Read the config file
     let config = config::Config::read(path).unwrap();
-    println!("Config: {:?}", config);
 
     // Retrieve the wallpapers from the directory
     let wallpapers = helpers::get_wallpapers(path);
@@ -49,12 +45,13 @@ pub fn set(args: Vec<String>) {
     let day = time::Day::new_with(config.start, config.end);
     let segments = day.divide(wallpapers.len() as u32);
 
-    // Get current time of day
-    let now = Local::now();
-    let current_time = now.num_seconds_from_midnight();
+    // ! TODO: Remove this debug code block
+    for (i, segment) in segments.iter().enumerate() {
+        println!("Segment: {} \t {}", i, segment.time());
+    }
 
     // Get the segment for the current time
-    let segment = time::get_segment_number(&segments, current_time);
+    let segment = time::get_current_segment(&segments);
 
     // Set the Wallpaper
     let wallpaper = &wallpapers[segment];
