@@ -4,9 +4,6 @@ use crate::helpers;
 use crate::time;
 use crate::wallpaper;
 
-// External Library
-use chrono::{Local, Timelike};
-
 // ---
 // GET
 // ---
@@ -40,8 +37,6 @@ pub fn set(args: Vec<String>) {
 
     // Read the config file
     let config = config::Config::read(path).unwrap();
-    println!("\n\n\n");
-    println!("{:?}", config);
 
     // Retrieve the wallpapers from the directory
     let wallpapers = helpers::get_wallpapers(path);
