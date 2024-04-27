@@ -1,5 +1,6 @@
 // Library
 mod commands;
+mod helpers;
 mod wallpaper;
 
 fn main() {

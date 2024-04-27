@@ -1,3 +1,5 @@
+// Library
+use crate::helpers;
 use crate::wallpaper;
 
 /// Get the current wallpaper path
@@ -14,10 +16,20 @@ pub fn set(args: Vec<String>) {
         std::process::exit(1);
     }
 
-    // Extract the path from the arguments and set the wallpaper
+    // Extract the path from the arguments
     let path = &args[2];
-    wallpaper::set(path).unwrap();
-    println!("Wallpaper set to: {}", path);
+
+    // Check if the path is a valid directory
+    if !std::path::Path::new(path).exists() {
+        eprintln!("Error: Path '{}' does not exist", path);
+        std::process::exit(1);
+    }
+
+    // Retrieve the wallpapers from the directory
+    let wallpapers = helpers::get_wallpapers(path);
+
+    // Print the count of wallpapers found
+    println!("Found {} wallpapers", wallpapers.len());
 }
 
 /// Unknown command handler
