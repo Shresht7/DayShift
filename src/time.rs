@@ -45,16 +45,24 @@ pub fn get_current_segment(segments: &Vec<Segment>) -> usize {
 
 /// A struct representing a day with a start and end time
 pub struct Day {
-    start: NaiveTime,
-    end: NaiveTime,
+    start: NaiveDateTime,
+    end: NaiveDateTime,
     duration: Duration,
 }
 
 impl Day {
     /// Create a new day with the default start and end times (00:00 - 23:59)
     pub fn new() -> Self {
-        let start = NaiveTime::from_hms_opt(0, 0, 0).unwrap();
-        let end = NaiveTime::from_hms_opt(23, 59, 59).unwrap();
+        let start = Local::now()
+            .naive_local()
+            .date()
+            .and_hms_opt(0, 0, 0)
+            .unwrap();
+        let end = Local::now()
+            .naive_local()
+            .date()
+            .and_hms_opt(23, 59, 59)
+            .unwrap();
         Self {
             start,
             end,
@@ -64,6 +72,14 @@ impl Day {
 
     /// Create a new day with the specified start and end times
     pub fn new_with(start: NaiveTime, end: NaiveTime) -> Self {
+        let date = Local::now().naive_local().date();
+        let end = if end < start {
+            NaiveDateTime::new(date, end) + Duration::days(1)
+        } else {
+            NaiveDateTime::new(date, end)
+        };
+        let start = NaiveDateTime::new(date, start);
+
         Self {
             start,
             end,
@@ -78,10 +94,8 @@ impl Day {
         // Calculate the duration of each segment
         let segment_duration = self.duration / divisions as i32;
 
-        let date = Local::now().naive_local().date();
-
         // Create segments based on the calculated duration
-        let mut start = NaiveDateTime::new(date, self.start);
+        let mut start = self.start;
         for _ in 0..divisions {
             let end = start + segment_duration;
             segments.push(Segment {
