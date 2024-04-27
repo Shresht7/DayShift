@@ -80,11 +80,7 @@ impl Day {
         let mut start = self.start;
         for _ in 0..divisions {
             let end = start + segment_duration;
-            segments.push(Segment {
-                start,
-                end,
-                duration: segment_duration,
-            });
+            segments.push(Segment::new(start, end));
             start = end;
         }
 
