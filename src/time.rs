@@ -1,3 +1,5 @@
+// TODO: Use seconds instead of minutes for increased precision
+
 // ---------
 // CONSTANTS
 // ---------

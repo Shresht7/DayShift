@@ -4,6 +4,8 @@ use std::os::windows::ffi::OsStrExt;
 // External Library
 use winapi::um::winuser;
 
+// TODO: Add support for other platforms
+
 // ---
 // GET
 // ---
