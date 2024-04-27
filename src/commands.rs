@@ -1,6 +1,10 @@
 // Library
 use crate::helpers;
+use crate::time;
 use crate::wallpaper;
+
+// External Library
+use chrono::{Local, Timelike};
 
 // ---
 // GET
@@ -36,8 +40,24 @@ pub fn set(args: Vec<String>) {
     // Retrieve the wallpapers from the directory
     let wallpapers = helpers::get_wallpapers(path);
 
-    // Print the count of wallpapers found
-    println!("Found {} wallpapers", wallpapers.len());
+    // Divide the day into segments
+    let day = time::Day::new();
+    let segments = day.divide(wallpapers.len() as u32);
+
+    // Get current time of day
+    let now = Local::now();
+    let current_time = now.hour() * 60 + now.minute();
+
+    // Get the segment for the current time
+    let segment = time::get_segment_number(&segments, current_time);
+
+    // Print all the segments
+    for (i, segment) in segments.iter().enumerate() {
+        println!("Segment {}: {}", i, segment.time());
+    }
+
+    // Show the segment time range
+    println!("\nSegment {}: {}", segment, segments[segment].time());
 }
 
 // -------
