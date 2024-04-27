@@ -51,13 +51,10 @@ pub fn set(args: Vec<String>) {
     // Get the segment for the current time
     let segment = time::get_segment_number(&segments, current_time);
 
-    // Print all the segments
-    for (i, segment) in segments.iter().enumerate() {
-        println!("Segment {}: {}", i, segment.time());
-    }
-
-    // Show the segment time range
-    println!("\nSegment {}: {}", segment, segments[segment].time());
+    // Set the Wallpaper
+    let wallpaper = &wallpapers[segment];
+    wallpaper::set(wallpaper.to_str().unwrap()).unwrap();
+    println!("Wallpaper set to: {}", wallpaper.to_str().unwrap());
 }
 
 // -------
