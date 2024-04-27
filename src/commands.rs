@@ -2,11 +2,19 @@
 use crate::helpers;
 use crate::wallpaper;
 
+// ---
+// GET
+// ---
+
 /// Get the current wallpaper path
 pub fn get(_: Vec<String>) {
     let filepath = wallpaper::get().unwrap();
     println!("Wallpaper Path: {}", filepath);
 }
+
+// ---
+// SET
+// ---
 
 /// Set the wallpaper
 pub fn set(args: Vec<String>) {
@@ -31,6 +39,10 @@ pub fn set(args: Vec<String>) {
     // Print the count of wallpapers found
     println!("Found {} wallpapers", wallpapers.len());
 }
+
+// -------
+// UNKNOWN
+// -------
 
 /// Unknown command handler
 pub fn unknown(args: Vec<String>) {

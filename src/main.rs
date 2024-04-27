@@ -3,6 +3,11 @@ mod commands;
 mod helpers;
 mod wallpaper;
 
+// ----
+// MAIN
+// ----
+
+/// The entrypoint of the application
 fn main() {
     // Read the command line arguments
     let args: Vec<String> = std::env::args().collect();

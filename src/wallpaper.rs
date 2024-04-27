@@ -4,15 +4,19 @@ use std::os::windows::ffi::OsStrExt;
 // External Library
 use winapi::um::winuser;
 
+// ---
+// GET
+// ---
+
 /// Get the current wallpaper path using the Windows API
 pub fn get() -> Result<String, Box<dyn std::error::Error>> {
     unsafe {
-        // Create a buffer to store the wallpaper path (maximum length is 260)
+        // Create a buffer to store the wallpaper path (maximum length is 260 in Windows)
         let buffer: [u16; 260] = std::mem::zeroed();
 
         // Try to get the wallpaper path using the Windows API
         let ok = winuser::SystemParametersInfoW(
-            winuser::SPI_GETDESKWALLPAPER,                  // Action
+            winuser::SPI_GETDESKWALLPAPER,                  // Action code
             buffer.len() as u32,                            // Maximum buffer size
             buffer.as_ptr() as *mut winapi::ctypes::c_void, // Buffer pointer to store the path
             0,                                              // No flags needed for this operation
@@ -31,6 +35,10 @@ pub fn get() -> Result<String, Box<dyn std::error::Error>> {
     }
 }
 
+// ---
+// SET
+// ---
+
 /// Set the wallpaper path using the Windows API
 pub fn set(path: &str) -> Result<(), Box<dyn std::error::Error>> {
     unsafe {
@@ -42,7 +50,7 @@ pub fn set(path: &str) -> Result<(), Box<dyn std::error::Error>> {
 
         // Try to set the wallpaper path using the Windows API
         let ok = winuser::SystemParametersInfoW(
-            winuser::SPI_SETDESKWALLPAPER,                          // Action
+            winuser::SPI_SETDESKWALLPAPER,                          // Action code
             0,                                                      // Not used
             path.as_ptr() as *mut winapi::ctypes::c_void,           // Path pointer to the wallpaper
             winuser::SPIF_UPDATEINIFILE | winuser::SPIF_SENDCHANGE, // Update the .ini file and send a change notification

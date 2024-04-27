@@ -1,3 +1,7 @@
+// ----------------
+// HELPER FUNCTIONS
+// ----------------
+
 /// Retrieve the wallpapers from the directory
 pub fn get_wallpapers(path: &str) -> Vec<std::path::PathBuf> {
     let mut wallpapers = Vec::new();
