@@ -2,9 +2,6 @@
 // CONSTANTS
 // ---------
 
-/// The number of seconds in a day
-pub const SECONDS_IN_DAY: u32 = 24 * 60 * 60;
-
 // -------
 // SEGMENT
 // -------
