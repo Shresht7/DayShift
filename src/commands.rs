@@ -11,7 +11,7 @@ use crate::wallpaper;
 /// Get the current wallpaper path
 pub fn get(_: Vec<String>) {
     let filepath = wallpaper::get().unwrap();
-    println!("Wallpaper Path: {}", filepath);
+    println!("{}", filepath);
 }
 
 // ---
