@@ -1,5 +1,5 @@
 // Library
-use chrono::{Duration, Local, NaiveTime};
+use chrono::{Duration, Local, NaiveDateTime, NaiveTime};
 
 // -------
 // SEGMENT
@@ -7,14 +7,14 @@ use chrono::{Duration, Local, NaiveTime};
 
 /// A struct representing a segment of time
 pub struct Segment {
-    pub start: NaiveTime,
-    pub end: NaiveTime,
+    pub start: NaiveDateTime,
+    pub end: NaiveDateTime,
     pub duration: Duration,
 }
 
 impl Segment {
     /// Create a new segment with the specified start and end times
-    fn new(start: NaiveTime, end: NaiveTime) -> Self {
+    fn new(start: NaiveDateTime, end: NaiveDateTime) -> Self {
         Self {
             start,
             end,
@@ -30,9 +30,9 @@ impl Segment {
 
 /// Get the segment number for the given time
 pub fn get_current_segment(segments: &Vec<Segment>) -> usize {
-    let time = Local::now().time();
+    let time = Local::now().naive_local();
     for (i, segment) in segments.iter().enumerate() {
-        if time >= segment.start && time <= segment.end {
+        if time >= segment.start && time < segment.end {
             return i;
         }
     }
@@ -78,8 +78,10 @@ impl Day {
         // Calculate the duration of each segment
         let segment_duration = self.duration / divisions as i32;
 
+        let date = Local::now().naive_local().date();
+
         // Create segments based on the calculated duration
-        let mut start = self.start;
+        let mut start = NaiveDateTime::new(date, self.start);
         for _ in 0..divisions {
             let end = start + segment_duration;
             segments.push(Segment {
