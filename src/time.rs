@@ -12,31 +12,29 @@ pub const SECONDS_IN_DAY: u32 = 24 * 60 * 60;
 /// A struct representing a segment of time with a start, end time
 /// and a duration in seconds
 pub struct Segment {
-    pub start: u32,
-    pub end: u32,
-    pub duration: u32,
+    pub start: chrono::NaiveTime,
+    pub end: chrono::NaiveTime,
+    pub duration: chrono::Duration,
 }
 
 impl Segment {
     /// Create a new segment with the specified start and end times
-    fn new(start: u32, end: u32) -> Self {
+    fn new(start: chrono::NaiveTime, end: chrono::NaiveTime) -> Self {
         Self {
             start,
             end,
-            duration: end - start,
+            duration: end.signed_duration_since(start),
         }
     }
 
     /// Get the time range of the segment in the format "HH:MM - HH:MM"
     pub fn time(&self) -> String {
-        let start = format!("{:02}:{:02}", self.start / 3600, self.start % 60);
-        let end = format!("{:02}:{:02}", self.end / 3600, self.end % 60);
-        return format!("{} - {}", start, end);
+        return format!("{} - {}", self.start, self.end);
     }
 }
 
 /// Get the segment number for the given time
-pub fn get_segment_number(segments: &Vec<Segment>, time: u32) -> usize {
+pub fn get_segment_number(segments: &Vec<Segment>, time: chrono::NaiveTime) -> usize {
     for (i, segment) in segments.iter().enumerate() {
         if time >= segment.start && time < segment.end {
             return i;
@@ -51,27 +49,29 @@ pub fn get_segment_number(segments: &Vec<Segment>, time: u32) -> usize {
 
 /// A struct representing a day with a start and end time
 pub struct Day {
-    start: u32,
-    end: u32,
-    duration: u32,
+    start: chrono::NaiveTime,
+    end: chrono::NaiveTime,
+    duration: chrono::Duration,
 }
 
 impl Day {
     /// Create a new day with the default start and end times (00:00 - 23:59)
     pub fn new() -> Self {
+        let start = chrono::NaiveTime::from_hms_opt(0, 0, 0).unwrap();
+        let end = chrono::NaiveTime::from_hms_opt(23, 59, 59).unwrap();
         Self {
-            start: 0,
-            end: SECONDS_IN_DAY,
-            duration: SECONDS_IN_DAY,
+            start,
+            end,
+            duration: end.signed_duration_since(start),
         }
     }
 
     /// Create a new day with the specified start and end times
-    pub fn new_with(start: u32, end: u32) -> Self {
+    pub fn new_with(start: chrono::NaiveTime, end: chrono::NaiveTime) -> Self {
         Self {
             start,
             end,
-            duration: end - start,
+            duration: end.signed_duration_since(start),
         }
     }
 
@@ -80,17 +80,18 @@ impl Day {
         let mut segments = Vec::new();
 
         // Calculate the duration of each segment
-        let segment_duration = (self.duration as f64 / divisions as f64).ceil() as u32;
+        let segment_duration = self.duration / divisions as i32;
 
         // Create segments based on the calculated duration
+        let mut start = self.start;
         for i in 0..divisions {
-            let start = self.start + i * segment_duration;
             let end = start + segment_duration;
             segments.push(Segment {
                 start,
                 end,
                 duration: segment_duration,
             });
+            start = end;
         }
 
         return segments;

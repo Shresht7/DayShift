@@ -46,15 +46,14 @@ pub fn set(args: Vec<String>) {
     let wallpapers = helpers::get_wallpapers(path);
 
     // Divide the day into segments
-    let day = time::Day::new_with(config.start, config.end);
+    let day = time::Day::new();
     let segments = day.divide(wallpapers.len() as u32);
 
     // Get current time of day
     let now = Local::now();
-    let current_time = now.num_seconds_from_midnight();
 
     // Get the segment for the current time
-    let segment = time::get_segment_number(&segments, current_time);
+    let segment = time::get_segment_number(&segments, now.time());
 
     // Set the Wallpaper
     let wallpaper = &wallpapers[segment];
