@@ -51,7 +51,7 @@ pub fn set(args: Vec<String>) {
 
     // Get current time of day
     let now = Local::now();
-    let current_time = now.hour() * 60 + now.minute();
+    let current_time = now.num_seconds_from_midnight();
 
     // Get the segment for the current time
     let segment = time::get_segment_number(&segments, current_time);

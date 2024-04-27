@@ -1,18 +1,16 @@
-// TODO: Use seconds instead of minutes for increased precision
-
 // ---------
 // CONSTANTS
 // ---------
 
-/// The number of minutes in a day
-pub const MINUTES_IN_DAY: u32 = 24 * 60;
+/// The number of seconds in a day
+pub const SECONDS_IN_DAY: u32 = 24 * 60 * 60;
 
 // -------
 // SEGMENT
 // -------
 
 /// A struct representing a segment of time with a start, end time
-/// and a duration in minutes
+/// and a duration in seconds
 pub struct Segment {
     pub start: u32,
     pub end: u32,
@@ -31,8 +29,8 @@ impl Segment {
 
     /// Get the time range of the segment in the format "HH:MM - HH:MM"
     pub fn time(&self) -> String {
-        let start = format!("{:02}:{:02}", self.start / 60, self.start % 60);
-        let end = format!("{:02}:{:02}", self.end / 60, self.end % 60);
+        let start = format!("{:02}:{:02}", self.start / 3600, self.start % 60);
+        let end = format!("{:02}:{:02}", self.end / 3600, self.end % 60);
         return format!("{} - {}", start, end);
     }
 }
@@ -63,8 +61,8 @@ impl Day {
     pub fn new() -> Self {
         Self {
             start: 0,
-            end: MINUTES_IN_DAY,
-            duration: MINUTES_IN_DAY,
+            end: SECONDS_IN_DAY,
+            duration: SECONDS_IN_DAY,
         }
     }
 

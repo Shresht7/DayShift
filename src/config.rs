@@ -17,7 +17,7 @@ impl Default for Config {
     fn default() -> Config {
         Config {
             start: 0,
-            end: time::MINUTES_IN_DAY,
+            end: time::SECONDS_IN_DAY,
         }
     }
 }
