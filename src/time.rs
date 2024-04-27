@@ -1,22 +1,20 @@
-// ---------
-// CONSTANTS
-// ---------
+// Library
+use chrono::{Duration, Local, NaiveTime};
 
 // -------
 // SEGMENT
 // -------
 
-/// A struct representing a segment of time with a start, end time
-/// and a duration in seconds
+/// A struct representing a segment of time
 pub struct Segment {
-    pub start: chrono::NaiveTime,
-    pub end: chrono::NaiveTime,
-    pub duration: chrono::Duration,
+    pub start: NaiveTime,
+    pub end: NaiveTime,
+    pub duration: Duration,
 }
 
 impl Segment {
     /// Create a new segment with the specified start and end times
-    fn new(start: chrono::NaiveTime, end: chrono::NaiveTime) -> Self {
+    fn new(start: NaiveTime, end: NaiveTime) -> Self {
         Self {
             start,
             end,
@@ -31,9 +29,10 @@ impl Segment {
 }
 
 /// Get the segment number for the given time
-pub fn get_segment_number(segments: &Vec<Segment>, time: chrono::NaiveTime) -> usize {
+pub fn get_current_segment(segments: &Vec<Segment>) -> usize {
+    let time = Local::now().time();
     for (i, segment) in segments.iter().enumerate() {
-        if time >= segment.start && time < segment.end {
+        if time >= segment.start && time <= segment.end {
             return i;
         }
     }
@@ -46,16 +45,16 @@ pub fn get_segment_number(segments: &Vec<Segment>, time: chrono::NaiveTime) -> u
 
 /// A struct representing a day with a start and end time
 pub struct Day {
-    start: chrono::NaiveTime,
-    end: chrono::NaiveTime,
-    duration: chrono::Duration,
+    start: NaiveTime,
+    end: NaiveTime,
+    duration: Duration,
 }
 
 impl Day {
     /// Create a new day with the default start and end times (00:00 - 23:59)
     pub fn new() -> Self {
-        let start = chrono::NaiveTime::from_hms_opt(10, 0, 0).unwrap();
-        let end = chrono::NaiveTime::from_hms_opt(09, 59, 59).unwrap();
+        let start = NaiveTime::from_hms_opt(0, 0, 0).unwrap();
+        let end = NaiveTime::from_hms_opt(23, 59, 59).unwrap();
         Self {
             start,
             end,
@@ -64,7 +63,7 @@ impl Day {
     }
 
     /// Create a new day with the specified start and end times
-    pub fn new_with(start: chrono::NaiveTime, end: chrono::NaiveTime) -> Self {
+    pub fn new_with(start: NaiveTime, end: NaiveTime) -> Self {
         Self {
             start,
             end,
@@ -81,7 +80,7 @@ impl Day {
 
         // Create segments based on the calculated duration
         let mut start = self.start;
-        for i in 0..divisions {
+        for _ in 0..divisions {
             let end = start + segment_duration;
             segments.push(Segment {
                 start,

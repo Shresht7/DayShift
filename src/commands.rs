@@ -40,7 +40,8 @@ pub fn set(args: Vec<String>) {
 
     // Read the config file
     let config = config::Config::read(path).unwrap();
-    println!("Config: {:?}", config);
+    println!("\n\n\n");
+    println!("{:?}", config);
 
     // Retrieve the wallpapers from the directory
     let wallpapers = helpers::get_wallpapers(path);
@@ -49,11 +50,8 @@ pub fn set(args: Vec<String>) {
     let day = time::Day::new();
     let segments = day.divide(wallpapers.len() as u32);
 
-    // Get current time of day
-    let now = Local::now();
-
     // Get the segment for the current time
-    let segment = time::get_segment_number(&segments, now.time());
+    let segment = time::get_current_segment(&segments);
 
     // Set the Wallpaper
     let wallpaper = &wallpapers[segment];
