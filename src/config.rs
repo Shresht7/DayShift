@@ -10,7 +10,6 @@ use serde::Deserialize;
 pub struct Config {
     pub start: u32,
     pub end: u32,
-    pub offset: u32,
 }
 
 // Default Configuration Values
@@ -19,7 +18,6 @@ impl Default for Config {
         Config {
             start: 0,
             end: time::MINUTES_IN_DAY,
-            offset: 0,
         }
     }
 }
