@@ -54,7 +54,7 @@ impl Day {
     pub fn new_with(start: NaiveTime, end: NaiveTime) -> Self {
         let date = Local::now().naive_local().date();
 
-        let end = if end < start {
+        let end = if end <= start {
             NaiveDateTime::new(date, end) + Duration::days(1)
         } else {
             NaiveDateTime::new(date, end)
