@@ -57,8 +57,8 @@ pub struct Day {
 impl Day {
     /// Create a new day with the default start and end times (00:00 - 23:59)
     pub fn new() -> Self {
-        let start = chrono::NaiveTime::from_hms_opt(0, 0, 0).unwrap();
-        let end = chrono::NaiveTime::from_hms_opt(23, 59, 59).unwrap();
+        let start = chrono::NaiveTime::from_hms_opt(10, 0, 0).unwrap();
+        let end = chrono::NaiveTime::from_hms_opt(09, 59, 59).unwrap();
         Self {
             start,
             end,
