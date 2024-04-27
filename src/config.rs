@@ -5,7 +5,7 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 #[serde(default)]
 pub struct Config {
-    offset: u32,
+    pub offset: u32,
 }
 
 // Default Configuration Values

@@ -69,10 +69,10 @@ impl Day {
     }
 
     /// Create a new day with the specified start and end times
-    pub fn new_with(start: u32, end: u32) -> Self {
+    pub fn new_with(start: u32, end: u32, offset: u32) -> Self {
         Self {
-            start,
-            end,
+            start: start + offset,
+            end: end + offset,
             duration: end - start,
         }
     }
