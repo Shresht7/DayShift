@@ -46,7 +46,7 @@ pub fn set(args: Vec<String>) {
     let wallpapers = helpers::get_wallpapers(path);
 
     // Divide the day into segments
-    let day = time::Day::new_with(config.start, config.end); // TODO: Allow custom day start and end times
+    let day = time::Day::new_with(config.start, config.end);
     let segments = day.divide(wallpapers.len() as u32);
 
     // Get current time of day
