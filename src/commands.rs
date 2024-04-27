@@ -1,4 +1,5 @@
 // Library
+use crate::config;
 use crate::helpers;
 use crate::time;
 use crate::wallpaper;
@@ -36,6 +37,10 @@ pub fn set(args: Vec<String>) {
         eprintln!("Error: Path '{}' does not exist", path);
         std::process::exit(1);
     }
+
+    // Read the config file
+    let config = config::Config::read(path).unwrap();
+    println!("Config: {:?}", config);
 
     // Retrieve the wallpapers from the directory
     let wallpapers = helpers::get_wallpapers(path);
