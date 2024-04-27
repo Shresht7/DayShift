@@ -47,7 +47,7 @@ pub fn set(args: Vec<String>) {
 
     // ! TODO: Remove this debug code block
     for (i, segment) in segments.iter().enumerate() {
-        println!("Segment: {} \t {}", i, segment.time());
+        println!("Segment: {} \t {}", i, segment);
     }
 
     // Get the segment for the current time
@@ -57,9 +57,9 @@ pub fn set(args: Vec<String>) {
     let wallpaper = &wallpapers[segment];
     wallpaper::set(wallpaper.to_str().unwrap()).unwrap();
     println!(
-        "Wallpaper set to: {} for {}",
+        "Wallpaper set to: {} for ({})",
         wallpaper.to_str().unwrap(),
-        segments[segment].time()
+        segments[segment]
     );
 }
 

@@ -1,4 +1,7 @@
 // Library
+use std::fmt::{self, Display, Formatter};
+
+// External Library
 use chrono::{Duration, Local, NaiveDateTime, NaiveTime};
 
 // -------
@@ -7,24 +10,19 @@ use chrono::{Duration, Local, NaiveDateTime, NaiveTime};
 
 /// A struct representing a segment of time
 pub struct Segment {
-    pub start: NaiveDateTime,
-    pub end: NaiveDateTime,
-    pub duration: Duration,
+    start: NaiveDateTime,
+    end: NaiveDateTime,
 }
 
-impl Segment {
-    /// Create a new segment with the specified start and end times
-    fn new(start: NaiveDateTime, end: NaiveDateTime) -> Self {
-        Self {
-            start,
-            end,
-            duration: end.signed_duration_since(start),
-        }
-    }
-
-    /// Get the time range of the segment in the format "HH:MM - HH:MM"
-    pub fn time(&self) -> String {
-        return format!("{} - {}", self.start, self.end);
+// Implement the Display trait for the Segment struct
+impl Display for Segment {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        write!(
+            f,
+            "{} - {}",
+            self.start.time().format("%H:%M"),
+            self.end.time().format("%H:%M")
+        )
     }
 }
 
@@ -80,7 +78,7 @@ impl Day {
         let mut start = self.start;
         for _ in 0..divisions {
             let end = start + segment_duration;
-            segments.push(Segment::new(start, end));
+            segments.push(Segment { start, end });
             start = end;
         }
 
