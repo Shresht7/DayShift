@@ -27,9 +27,15 @@ fn main() {
     match command.as_str() {
         "get" => commands::get(args),
         "set" => commands::set(args),
+
         "help" => commands::help(args),
         "--help" => commands::help(args),
         "-h" => commands::help(args),
+
+        "version" => commands::version(),
+        "--version" => commands::version(),
+        "-v" => commands::version(),
+
         _ => commands::unknown(args),
     }
 }
