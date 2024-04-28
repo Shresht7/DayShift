@@ -97,3 +97,12 @@ Note:
 "#;
     println!("{}", msg);
 }
+
+// -------
+// VERSION
+// -------
+
+/// Display the version number
+pub fn version() {
+    println!("{}", env!("CARGO_PKG_VERSION"));
+}
