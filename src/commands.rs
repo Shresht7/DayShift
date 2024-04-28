@@ -88,14 +88,20 @@ pub fn help() {
 Usage: dayshift <command> <args...>
 
 Commands:
-    get         Get the current wallpaper path
-    set         Set the wallpaper theme
-    help        Display this help message
+    get             Get the current wallpaper path
+    set             Set the wallpaper theme
+    help            Display this help message
+    version         Display the version number
+
+Options:
+    -h, --help      Display the help message
+    -v, --version   Display the version number
 
 Examples:
     dayshift get
     dayshift set /path/to/wallpapers
     dayshift help
+    dayshift version
 
 Note:
     The 'set' command requires a valid directory path containing wallpapers.
