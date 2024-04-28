@@ -45,7 +45,6 @@ pub fn set(args: Vec<String>) {
 
     // Read the config file
     let config = config::Config::read(&path).unwrap();
-    println!("Configuration: {:?}", config);
 
     // Retrieve the wallpapers from the directory
     let wallpapers = helpers::get_wallpapers(&config.path);
