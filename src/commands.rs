@@ -72,9 +72,9 @@ pub fn set(args: Vec<String>) {
 // -------
 
 /// Unknown command handler
-pub fn unknown(args: Vec<String>) {
-    eprintln!("Error: Unknown command '{}'\n", args[1]);
-    help(args);
+pub fn unknown(command: &str) {
+    eprintln!("Error: Unknown command '{}'\n", command);
+    help();
     std::process::exit(1);
 }
 
@@ -83,7 +83,7 @@ pub fn unknown(args: Vec<String>) {
 // ----
 
 /// Display the help message
-pub fn help(_: Vec<String>) {
+pub fn help() {
     let msg = r#"
 Usage: dayshift <command> <args...>
 

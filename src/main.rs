@@ -16,7 +16,7 @@ fn main() {
 
     // Validate arguments
     if args.len() < 2 {
-        commands::help(args);
+        commands::help();
         std::process::exit(1);
     }
 
@@ -28,14 +28,14 @@ fn main() {
         "get" => commands::get(args),
         "set" => commands::set(args),
 
-        "help" => commands::help(args),
-        "--help" => commands::help(args),
-        "-h" => commands::help(args),
+        "help" => commands::help(),
+        "--help" => commands::help(),
+        "-h" => commands::help(),
 
         "version" => commands::version(),
         "--version" => commands::version(),
         "-v" => commands::version(),
 
-        _ => commands::unknown(args),
+        _ => commands::unknown(&command),
     }
 }
