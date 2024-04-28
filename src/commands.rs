@@ -31,7 +31,7 @@ pub fn set(args: Vec<String>) {
 
     // Check if the path is a valid directory
     if !path.exists() {
-        eprintln!("Error: Path '{}' does not exist", path.to_str().unwrap());
+        eprintln!("Error: Path does not exist - {}", &args[2]);
         std::process::exit(1);
     }
 
