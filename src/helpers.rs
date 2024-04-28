@@ -7,7 +7,7 @@ pub fn get_wallpapers(path: &std::path::PathBuf) -> Vec<std::path::PathBuf> {
     let mut wallpapers = Vec::new();
 
     // Read the directory and store the paths that match the criteria
-    let paths = std::fs::read_dir(path).unwrap();
+    let paths = std::fs::read_dir(path).expect("Failed to read directory");
     for path in paths {
         let path = path.unwrap().path();
         // Check if the path matches the criteria

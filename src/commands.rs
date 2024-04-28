@@ -48,7 +48,7 @@ pub fn set(args: Vec<String>) {
     println!("Configuration: {:?}", config);
 
     // Retrieve the wallpapers from the directory
-    let wallpapers = helpers::get_wallpapers(&path);
+    let wallpapers = helpers::get_wallpapers(&config.path);
 
     // Divide the day into segments
     let day = time::Day::new_with(config.start, config.end);
