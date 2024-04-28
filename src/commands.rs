@@ -35,6 +35,14 @@ pub fn set(args: Vec<String>) {
         std::process::exit(1);
     }
 
+    // Check if the path is an image file
+    if helpers::is_image_file(&path) {
+        // Set the image file as the wallpaper and exit early
+        wallpaper::set(path.to_str().unwrap()).unwrap();
+        println!("Wallpaper set to: {}", path.to_str().unwrap());
+        std::process::exit(0);
+    }
+
     // Read the config file
     let config = config::Config::read(&path).unwrap();
     println!("Configuration: {:?}", config);
