@@ -45,6 +45,19 @@ fn matches_criteria(path: &std::path::PathBuf) -> bool {
 /// Check if the path is an image file (jpg, jpeg, png)
 pub fn is_image_file(path: &std::path::PathBuf) -> bool {
     let valid_extensions = ["jpg", "jpeg", "png"];
-    let ext = path.extension().unwrap().to_str().unwrap();
-    return path.is_file() && valid_extensions.contains(&ext);
+
+    // Check if the path is a file
+    if !path.is_file() {
+        return false;
+    }
+
+    // Check if the extension is valid
+    let ext = path.extension();
+    match ext {
+        Some(ext) => {
+            let ext = ext.to_str().unwrap();
+            return valid_extensions.contains(&ext);
+        }
+        None => return false,
+    }
 }
