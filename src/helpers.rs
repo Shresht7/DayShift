@@ -3,7 +3,7 @@
 // ----------------
 
 /// Retrieve the wallpapers from the directory
-pub fn get_wallpapers(path: &std::path::Path) -> Vec<std::path::PathBuf> {
+pub fn get_wallpapers(path: &std::path::PathBuf) -> Vec<std::path::PathBuf> {
     let mut wallpapers = Vec::new();
 
     // Read the directory and store the paths that match the criteria

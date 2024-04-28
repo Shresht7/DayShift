@@ -27,7 +27,7 @@ pub fn set(args: Vec<String>) {
     }
 
     // Extract the path from the arguments
-    let path = std::path::Path::new(&args[2]);
+    let path = std::path::PathBuf::from(&args[2]);
 
     // Check if the path is a valid directory
     if !path.exists() {
@@ -36,11 +36,11 @@ pub fn set(args: Vec<String>) {
     }
 
     // Read the config file
-    let config = config::Config::read(path).unwrap();
+    let config = config::Config::read(&path).unwrap();
     println!("Configuration: {:?}", config);
 
     // Retrieve the wallpapers from the directory
-    let wallpapers = helpers::get_wallpapers(path);
+    let wallpapers = helpers::get_wallpapers(&path);
 
     // Divide the day into segments
     let day = time::Day::new_with(config.start, config.end);

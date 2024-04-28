@@ -37,7 +37,7 @@ impl Default for Config {
 
 impl Config {
     /// Read the configuration from the config file in the given path
-    pub fn read(path: &std::path::Path) -> Result<Config, Box<dyn std::error::Error>> {
+    pub fn read(path: &std::path::PathBuf) -> Result<Config, Box<dyn std::error::Error>> {
         let path = path.join(CONFIG_FILE);
         let contents = std::fs::read_to_string(&path).unwrap_or(String::from("{}"));
         let mut config: Config = serde_json::from_str(&contents)?;
