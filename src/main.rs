@@ -16,7 +16,7 @@ fn main() {
 
     // Validate arguments
     if args.len() < 2 {
-        eprintln!("Usage: {} <command> <args...>", args[0]);
+        commands::help(args);
         std::process::exit(1);
     }
 
@@ -27,6 +27,9 @@ fn main() {
     match command.as_str() {
         "get" => commands::get(args),
         "set" => commands::set(args),
+        "help" => commands::help(args),
+        "--help" => commands::help(args),
+        "-h" => commands::help(args),
         _ => commands::unknown(args),
     }
 }
