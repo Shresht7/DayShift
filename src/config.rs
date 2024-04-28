@@ -8,6 +8,15 @@ use serde::Deserialize;
 pub struct Config {
     pub start: NaiveTime,
     pub end: NaiveTime,
+    pub selection: SelectionMode,
+}
+
+/// Selection Mode
+#[derive(Deserialize, Debug)]
+#[serde(rename_all = "lowercase")]
+pub enum SelectionMode {
+    Random,     // Select randomly
+    Sequential, // Select in order
 }
 
 // Default Configuration Values
@@ -16,6 +25,7 @@ impl Default for Config {
         Config {
             start: NaiveTime::from_hms_opt(0, 0, 0).unwrap_or_default(),
             end: NaiveTime::from_hms_opt(23, 59, 59).unwrap_or_default(),
+            selection: SelectionMode::Random,
         }
     }
 }
