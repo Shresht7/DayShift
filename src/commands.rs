@@ -73,7 +73,8 @@ pub fn set(args: Vec<String>) {
 
 /// Unknown command handler
 pub fn unknown(args: Vec<String>) {
-    eprintln!("Error: Unknown command '{}'", args[1]);
+    eprintln!("Error: Unknown command '{}'\n", args[1]);
+    help(args);
     std::process::exit(1);
 }
 
