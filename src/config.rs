@@ -27,7 +27,7 @@ pub enum SelectionMode {
 impl Default for Config {
     fn default() -> Config {
         Config {
-            path: std::env::current_dir().unwrap_or_default(),
+            path: std::path::PathBuf::default(),
             start: NaiveTime::from_hms_opt(0, 0, 0).unwrap_or_default(),
             end: NaiveTime::from_hms_opt(23, 59, 59).unwrap_or_default(),
             selection: SelectionMode::Random,
@@ -37,11 +37,27 @@ impl Default for Config {
 
 impl Config {
     /// Read the configuration from the config file in the given path
-    pub fn read(path: &std::path::PathBuf) -> Result<Config, Box<dyn std::error::Error>> {
-        let path = path.join(CONFIG_FILE);
-        let contents = std::fs::read_to_string(&path).unwrap_or(String::from("{}"));
+    pub fn read(dir: &std::path::PathBuf) -> Result<Config, Box<dyn std::error::Error>> {
+        let config_path = dir.join(CONFIG_FILE);
+        let contents = std::fs::read_to_string(&config_path).unwrap_or(String::from("{}"));
         let mut config: Config = serde_json::from_str(&contents)?;
-        config.path = path;
+
+        // Set the theme config path
+        match config.path {
+            // If the path is relative, join it with the given directory
+            path if path.is_relative() => {
+                config.path = dir.join(path);
+            }
+            // If the path is absolute, use it as is
+            path if path.is_absolute() => {
+                config.path = path;
+            }
+            // Default to the given directory
+            _ => {
+                config.path = dir.clone();
+            }
+        }
+
         Ok(config)
     }
 }
