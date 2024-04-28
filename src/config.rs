@@ -11,6 +11,7 @@ const CONFIG_FILE: &str = "dayshift.config.json";
 pub struct Config {
     pub start: NaiveTime,
     pub end: NaiveTime,
+    pub path: std::path::PathBuf,
     pub selection: SelectionMode,
 }
 
@@ -26,6 +27,7 @@ pub enum SelectionMode {
 impl Default for Config {
     fn default() -> Config {
         Config {
+            path: std::env::current_dir().unwrap_or_default(),
             start: NaiveTime::from_hms_opt(0, 0, 0).unwrap_or_default(),
             end: NaiveTime::from_hms_opt(23, 59, 59).unwrap_or_default(),
             selection: SelectionMode::Random,
@@ -37,8 +39,9 @@ impl Config {
     /// Read the configuration from the config file in the given path
     pub fn read(path: &std::path::Path) -> Result<Config, Box<dyn std::error::Error>> {
         let path = path.join(CONFIG_FILE);
-        let contents = std::fs::read_to_string(path).unwrap_or(String::from("{}"));
-        let config: Config = serde_json::from_str(&contents)?;
+        let contents = std::fs::read_to_string(&path).unwrap_or(String::from("{}"));
+        let mut config: Config = serde_json::from_str(&contents)?;
+        config.path = path;
         Ok(config)
     }
 }
