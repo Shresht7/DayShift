@@ -10,8 +10,10 @@ pub fn get_wallpapers(path: &std::path::PathBuf) -> Vec<std::path::PathBuf> {
     let paths = std::fs::read_dir(path).unwrap();
     for path in paths {
         let path = path.unwrap().path();
-        if matches_criteria(&path) {
-            wallpapers.push(path);
+        // Check if the path matches the criteria
+        match matches_criteria(&path) {
+            Some(true) => wallpapers.push(path),
+            _ => continue,
         }
     }
 
@@ -19,27 +21,25 @@ pub fn get_wallpapers(path: &std::path::PathBuf) -> Vec<std::path::PathBuf> {
 }
 
 /// Check if the path matches the criteria for a numbered wallpaper
-fn matches_criteria(path: &std::path::PathBuf) -> bool {
+fn matches_criteria(path: &std::path::PathBuf) -> Option<bool> {
     // Extract the extension and basename of the file
-    let ext = path.extension().unwrap().to_str().unwrap();
+    let ext = path.extension()?.to_str()?;
     let basename = path
-        .file_name()
-        .unwrap()
-        .to_str()
-        .unwrap()
+        .file_name()?
+        .to_str()?
         .trim_end_matches(&format!(".{}", ext));
 
     // Check if the path is a image file
     if !is_image_file(path) {
-        return false;
+        return Some(false);
     }
     // Ignore files that are not numbered
     if basename.parse::<u32>().is_err() {
-        return false;
+        return Some(false);
     }
 
     // If all the criteria are met, return true
-    return true;
+    return Some(true);
 }
 
 /// Check if the path is an image file (jpg, jpeg, png)
