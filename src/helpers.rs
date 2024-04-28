@@ -6,14 +6,24 @@
 pub fn get_wallpapers(path: &std::path::PathBuf) -> Vec<std::path::PathBuf> {
     let mut wallpapers = Vec::new();
 
-    // Read the directory and store the paths that match the criteria
-    let paths = std::fs::read_dir(path).expect("Failed to read directory");
-    for path in paths {
-        let path = path.unwrap().path();
-        // Check if the path matches the criteria
-        match matches_criteria(&path) {
-            Some(true) => wallpapers.push(path),
-            _ => continue,
+    // Define the glob pattern for the directory
+    let mut pattern = path.clone();
+    if !path.ends_with(".png") || !path.ends_with(".jpg") {
+        pattern.push("*");
+    }
+
+    // Iterate over the files in the directory
+    let pattern = pattern.to_str().unwrap();
+    for entry in glob::glob(pattern).unwrap() {
+        match entry {
+            Ok(path) => {
+                println!("Path: {:?}", path);
+                // Check if the path matches the criteria
+                if matches_criteria(&path).unwrap_or(false) {
+                    wallpapers.push(path);
+                }
+            }
+            Err(e) => eprintln!("Error: {}", e),
         }
     }
 
