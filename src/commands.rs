@@ -27,11 +27,11 @@ pub fn set(args: Vec<String>) {
     }
 
     // Extract the path from the arguments
-    let path = &args[2];
+    let path = std::path::Path::new(&args[2]);
 
     // Check if the path is a valid directory
-    if !std::path::Path::new(path).exists() {
-        eprintln!("Error: Path '{}' does not exist", path);
+    if !path.exists() {
+        eprintln!("Error: Path '{}' does not exist", path.to_str().unwrap());
         std::process::exit(1);
     }
 
