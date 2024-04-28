@@ -25,7 +25,7 @@ fn main() {
 
     // Match the command and execute the corresponding handler function
     match command.as_str() {
-        "get" => commands::get(args),
+        "get" => commands::get(),
         "set" => commands::set(args),
 
         "help" => commands::help(),
