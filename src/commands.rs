@@ -72,3 +72,28 @@ pub fn unknown(args: Vec<String>) {
     eprintln!("Error: Unknown command '{}'", args[1]);
     std::process::exit(1);
 }
+
+// ----
+// HELP
+// ----
+
+/// Display the help message
+pub fn help(_: Vec<String>) {
+    let msg = r#"
+Usage: dayshift <command> <args...>
+
+Commands:
+    get         Get the current wallpaper path
+    set         Set the wallpaper theme
+    help        Display this help message
+
+Examples:
+    dayshift get
+    dayshift set /path/to/wallpapers
+    dayshift help
+
+Note:
+    The 'set' command requires a valid directory path containing wallpapers.
+"#;
+    println!("{}", msg);
+}
