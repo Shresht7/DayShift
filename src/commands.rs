@@ -54,11 +54,6 @@ pub fn set(args: Vec<String>) {
     let day = time::Day::new_with(config.start, config.end);
     let segments = day.divide(wallpapers.len() as u32);
 
-    // ! TODO: Remove this debug code block
-    for (i, segment) in segments.iter().enumerate() {
-        println!("Segment: {} \t {}", i, segment);
-    }
-
     // Get the segment for the current time
     let segment = time::get_current_segment(&segments);
 
