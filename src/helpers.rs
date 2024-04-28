@@ -30,10 +30,9 @@ fn matches_criteria(path: &std::path::PathBuf) -> bool {
         .trim_end_matches(&format!(".{}", ext));
 
     // Check if the path is a image file
-    if !path.is_file() || !["jpg", "jpeg", "png"].contains(&ext) {
+    if !is_image_file(path) {
         return false;
     }
-
     // Ignore files that are not numbered
     if basename.parse::<u32>().is_err() {
         return false;
@@ -41,4 +40,11 @@ fn matches_criteria(path: &std::path::PathBuf) -> bool {
 
     // If all the criteria are met, return true
     return true;
+}
+
+/// Check if the path is an image file (jpg, jpeg, png)
+pub fn is_image_file(path: &std::path::PathBuf) -> bool {
+    let valid_extensions = ["jpg", "jpeg", "png"];
+    let ext = path.extension().unwrap().to_str().unwrap();
+    return path.is_file() && valid_extensions.contains(&ext);
 }
