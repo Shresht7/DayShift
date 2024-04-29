@@ -1,7 +1,7 @@
 // Library
 use crate::config;
 use crate::helpers;
-use crate::time;
+use crate::time::{self, CurrentSegment};
 use crate::wallpaper;
 
 // ---
@@ -54,7 +54,7 @@ pub fn set(args: Vec<String>) {
     let segments = day.divide(wallpapers.len() as u32);
 
     // Get the segment for the current time
-    let segment = time::get_current_segment(&segments);
+    let segment = segments.current_index();
 
     // Set the Wallpaper
     let wallpaper = &wallpapers[segment];

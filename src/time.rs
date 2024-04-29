@@ -77,19 +77,27 @@ pub trait TimeSegment {
     fn end(&self) -> NaiveDateTime;
 }
 
-/// Get the segment number for the given time
-pub fn get_current_segment<T: TimeSegment>(segments: &[T]) -> usize {
-    let time = Local::now().naive_local();
-    for (i, segment) in segments.iter().enumerate() {
-        if time >= segment.start() && time < segment.end() {
-            return i;
+pub trait CurrentSegment<T: TimeSegment> {
+    fn current(&self) -> &T;
+    fn current_index(&self) -> usize;
+}
+
+impl<T: TimeSegment> CurrentSegment<T> for Vec<T> {
+    fn current_index(&self) -> usize {
+        let time = Local::now().naive_local();
+        for (i, segment) in self.iter().enumerate() {
+            if time >= segment.start() && time < segment.end() {
+                return i;
+            }
+        }
+        if time >= self.last().unwrap().end() {
+            return self.len() - 1;
+        } else {
+            return 0;
         }
     }
-    if time >= segments.last().unwrap().end() {
-        return segments.len() - 1;
-    } else if time < segments.first().unwrap().start() {
-        return 0;
-    } else {
-        return 0;
+
+    fn current(&self) -> &T {
+        &self[self.current_index()]
     }
 }

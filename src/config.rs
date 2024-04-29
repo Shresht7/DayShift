@@ -60,7 +60,7 @@ impl Config {
     }
 
     /// Get the current configuration based on the current time
-    fn get_current(configs: &Vec<Config>) -> Config {
+    fn get_current(configs: &[Config]) -> Config {
         let mut config = Config::default();
 
         let now = chrono::Local::now().naive_local();
