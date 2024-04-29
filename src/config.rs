@@ -9,9 +9,13 @@ const CONFIG_FILE: &str = "dayshift.config.json";
 #[derive(Clone, Deserialize, Debug)]
 #[serde(default)]
 pub struct Config {
+    /// Start time
     pub start: NaiveTime,
+    /// End time
     pub end: NaiveTime,
+    /// Path to the wallpaper directory
     pub path: std::path::PathBuf,
+    /// Wallpaper selection mode (random or sequential)
     pub selection: SelectionMode,
 }
 
