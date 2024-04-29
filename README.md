@@ -1,5 +1,11 @@
 # DayShift
 
+<h3 align="center">
+⚠️ WORK IN PROGRESS ⚠️
+</h3>
+
+---
+
 Dynamically change wallpapers based on the time of the day.
 
 ## ⭐ Features
