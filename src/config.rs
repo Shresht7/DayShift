@@ -73,7 +73,13 @@ impl Config {
         let time = chrono::Local::now().time();
         let mut config = Config::default();
         for c in configs.iter() {
-            if time >= c.start && time < c.end {
+            let start = c.start;
+            let mut end = c.end;
+            if end <= start && time > start {
+                end += chrono::Duration::days(1);
+            }
+            println!("{} - {} - {}", start, end, time);
+            if time >= start && time < end {
                 config = c.clone();
             }
         }
