@@ -73,12 +73,16 @@ impl Display for TimeFrame {
 
 /// A trait for time segments that have a start and end time
 pub trait TimeSegment {
+    /// Get the start time of the segment
     fn start(&self) -> NaiveDateTime;
+    /// Get the end time of the segment
     fn end(&self) -> NaiveDateTime;
 }
 
 pub trait CurrentSegment<T: TimeSegment> {
+    /// Get the current segment based on the current time
     fn current(&self) -> &T;
+    /// Get the index of the current segment based on the current time
     fn current_index(&self) -> usize;
 }
 
