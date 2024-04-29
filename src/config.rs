@@ -1,5 +1,5 @@
 // External Library
-use chrono::NaiveTime;
+use chrono::{Duration, NaiveTime};
 use serde::Deserialize;
 
 /// Name of the configuration file
@@ -11,8 +11,8 @@ const CONFIG_FILE: &str = "dayshift.config.json";
 pub struct Config {
     /// Start time
     pub start: NaiveTime,
-    /// End time
-    pub end: NaiveTime,
+    /// Duration in hours
+    pub duration: u32,
     /// Path to the wallpaper directory
     pub path: std::path::PathBuf,
     /// Wallpaper selection mode (random or sequential)
@@ -33,7 +33,7 @@ impl Default for Config {
         Config {
             path: std::path::PathBuf::default(),
             start: NaiveTime::from_hms_opt(0, 0, 0).unwrap_or_default(),
-            end: NaiveTime::from_hms_opt(23, 59, 59).unwrap_or_default(),
+            duration: 24,
             selection: SelectionMode::Random,
         }
     }
@@ -70,19 +70,17 @@ impl Config {
 
     /// Get the current configuration based on the current time
     fn get_current(configs: &Vec<Config>) -> Config {
-        let time = chrono::Local::now().time();
         let mut config = Config::default();
+
+        let now = chrono::Local::now().naive_local();
         for c in configs.iter() {
-            let start = c.start;
-            let mut end = c.end;
-            if end <= start && time > start {
-                end += chrono::Duration::days(1);
-            }
-            println!("{} - {} - {}", start, end, time);
-            if time >= start && time < end {
+            let start = now.date().and_time(c.start);
+            let end = start + Duration::hours(c.duration as i64);
+            if now >= start && now < end {
                 config = c.clone();
             }
         }
+
         return config;
     }
 }
