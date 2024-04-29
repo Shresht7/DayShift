@@ -41,7 +41,7 @@ impl Default for Config {
 
 impl Config {
     /// Read the configuration from the config file in the given path
-    pub fn read(dir: &std::path::PathBuf) -> Result<Config, Box<dyn std::error::Error>> {
+    pub fn read(dir: &std::path::Path) -> Result<Config, Box<dyn std::error::Error>> {
         let config_path = dir.join(CONFIG_FILE);
         let contents = std::fs::read_to_string(&config_path).unwrap_or(String::from("[]"));
         let configs: Vec<Config> = serde_json::from_str(&contents)?;
@@ -49,23 +49,14 @@ impl Config {
         // Get the current configuration based on the current time
         let mut config = Config::get_current(&configs);
 
-        // Set the theme config path
-        match &config.path {
-            // If the path is relative, join it with the given directory
-            path if path.is_relative() => {
+        // Update the path if it is relative
+        if let Some(path) = config.path.to_str() {
+            if config.path.is_relative() {
                 config.path = dir.join(path);
-            }
-            // If the path is absolute, use it as is
-            path if path.is_absolute() => {
-                config.path = path.clone();
-            }
-            // Default to the given directory
-            _ => {
-                config.path = dir.clone();
             }
         }
 
-        return Ok(config);
+        Ok(config)
     }
 
     /// Get the current configuration based on the current time
