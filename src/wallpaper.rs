@@ -29,7 +29,11 @@ pub fn get() -> Result<String, Box<dyn std::error::Error>> {
 
         // If the operation failed, return the last OS error
         if !ok {
-            return Err(std::io::Error::last_os_error().into());
+            return Err(format!(
+                "Failed to get wallpaper: {}",
+                std::io::Error::last_os_error()
+            )
+            .into());
         }
 
         // Convert the buffer to a valid UTF-16 string and remove the trailing null character
@@ -63,7 +67,11 @@ pub fn set(path: &std::path::Path) -> Result<(), Box<dyn std::error::Error>> {
 
         // If the operation failed, return the last OS error
         if !ok {
-            return Err(std::io::Error::last_os_error().into());
+            return Err(format!(
+                "Failed to set wallpaper: {}",
+                std::io::Error::last_os_error()
+            )
+            .into());
         }
 
         // Return success
