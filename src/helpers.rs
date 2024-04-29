@@ -40,9 +40,10 @@ fn matches_criteria(path: &std::path::PathBuf) -> Option<bool> {
         .trim_end_matches(&format!(".{}", ext));
 
     // Check if the path is a image file
-    if !is_image_file(path) {
+    if !is_image_file(&path) {
         return Some(false);
     }
+
     // Ignore files that are not numbered
     if basename.parse::<u32>().is_err() {
         return Some(false);
@@ -52,22 +53,21 @@ fn matches_criteria(path: &std::path::PathBuf) -> Option<bool> {
     return Some(true);
 }
 
-/// Check if the path is an image file (jpg, jpeg, png)
-pub fn is_image_file(path: &std::path::PathBuf) -> bool {
-    let valid_extensions = ["jpg", "jpeg", "png"];
+// IS IMAGE FILE
+// -------------
 
+/// Valid image file extensions
+const VALID_EXTENSIONS: [&str; 3] = ["jpg", "jpeg", "png"];
+
+/// Check if the path is an image file (jpg, jpeg, png)
+pub fn is_image_file(path: &std::path::Path) -> bool {
     // Check if the path is a file
     if !path.is_file() {
         return false;
     }
-
     // Check if the extension is valid
-    let ext = path.extension();
-    match ext {
-        Some(ext) => {
-            let ext = ext.to_str().unwrap();
-            return valid_extensions.contains(&ext);
-        }
-        None => return false,
+    match path.extension().and_then(|s| s.to_str()) {
+        Some(extension) if VALID_EXTENSIONS.contains(&extension) => true,
+        _ => false,
     }
 }
