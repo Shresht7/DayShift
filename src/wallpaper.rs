@@ -42,7 +42,7 @@ pub fn get() -> Result<String, Box<dyn std::error::Error>> {
 // ---
 
 /// Set the wallpaper path using the Windows API
-pub fn set(path: &str) -> Result<(), Box<dyn std::error::Error>> {
+pub fn set(path: &std::path::Path) -> Result<(), Box<dyn std::error::Error>> {
     unsafe {
         // Convert the path to a UTF-16 string
         let path: Vec<u16> = std::ffi::OsStr::new(path)

@@ -38,8 +38,8 @@ pub fn set(args: Vec<String>) {
     // Check if the path is an image file
     if helpers::is_image_file(&path) {
         // Set the image file as the wallpaper and exit early
-        wallpaper::set(path.to_str().unwrap()).unwrap();
-        println!("Wallpaper set to: {}", path.to_str().unwrap());
+        wallpaper::set(&path).unwrap();
+        println!("Wallpaper set to: {}", &path.to_str().unwrap());
         std::process::exit(0);
     }
 
@@ -58,7 +58,7 @@ pub fn set(args: Vec<String>) {
 
     // Set the Wallpaper
     let wallpaper = &wallpapers[segment];
-    wallpaper::set(wallpaper.to_str().unwrap()).unwrap();
+    wallpaper::set(wallpaper).unwrap();
     println!(
         "Wallpaper set to: {} for ({})",
         wallpaper.to_str().unwrap(),
