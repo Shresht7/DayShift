@@ -1,5 +1,8 @@
+// Library
+use crate::time::{CurrentSegment, TimeSegment};
+
 // External Library
-use chrono::{Duration, NaiveTime};
+use chrono::{Duration, NaiveDateTime, NaiveTime};
 use serde::Deserialize;
 
 /// Name of the configuration file
@@ -39,6 +42,17 @@ impl Default for Config {
     }
 }
 
+// Implement the TimeSegment trait for Config
+impl TimeSegment for Config {
+    fn start(&self) -> NaiveDateTime {
+        let now = chrono::Local::now().naive_local();
+        now.date().and_time(self.start)
+    }
+    fn end(&self) -> NaiveDateTime {
+        self.start() + Duration::hours(self.duration as i64)
+    }
+}
+
 impl Config {
     /// Read the configuration from the config file in the given path
     pub fn read(dir: &std::path::Path) -> Result<Config, Box<dyn std::error::Error>> {
@@ -47,7 +61,7 @@ impl Config {
         let configs: Vec<Config> = serde_json::from_str(&contents)?;
 
         // Get the current configuration based on the current time
-        let mut config = Config::get_current(&configs);
+        let mut config = configs.current().clone();
 
         // Update the path if it is relative
         if let Some(path) = config.path.to_str() {
@@ -57,21 +71,5 @@ impl Config {
         }
 
         Ok(config)
-    }
-
-    /// Get the current configuration based on the current time
-    fn get_current(configs: &[Config]) -> Config {
-        let mut config = Config::default();
-
-        let now = chrono::Local::now().naive_local();
-        for c in configs.iter() {
-            let start = now.date().and_time(c.start);
-            let end = start + Duration::hours(c.duration as i64);
-            if now >= start && now < end {
-                config = c.clone();
-            }
-        }
-
-        return config;
     }
 }
