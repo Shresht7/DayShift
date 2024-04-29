@@ -46,14 +46,8 @@ impl Config {
         let contents = std::fs::read_to_string(&config_path).unwrap_or(String::from("[]"));
         let configs: Vec<Config> = serde_json::from_str(&contents)?;
 
-        let time = chrono::Local::now().time();
-
-        let mut config = configs[0].clone();
-        for c in configs.iter() {
-            if time >= c.start && time < c.end {
-                config = c.clone();
-            }
-        }
+        // Get the current configuration based on the current time
+        let mut config = Config::get_current(&configs);
 
         // Set the theme config path
         match &config.path {
@@ -72,5 +66,17 @@ impl Config {
         }
 
         return Ok(config);
+    }
+
+    /// Get the current configuration based on the current time
+    fn get_current(configs: &Vec<Config>) -> Config {
+        let time = chrono::Local::now().time();
+        let mut config = Config::default();
+        for c in configs.iter() {
+            if time >= c.start && time < c.end {
+                config = c.clone();
+            }
+        }
+        return config;
     }
 }
