@@ -49,20 +49,20 @@ pub fn set(args: Vec<String>) {
     // Retrieve the wallpapers from the directory
     let wallpapers = helpers::get_wallpapers(&config.path);
 
-    // Divide the day into segments
-    let day = time::TimeFrame::new(config.start, config.duration);
-    let segments = day.divide(wallpapers.len() as u32);
+    // Divide the timeframe into segments
+    let timeframe = time::TimeFrame::new(config.start, config.duration);
+    let segments = timeframe.divide(wallpapers.len() as u32);
 
-    // Get the segment for the current time
-    let segment = segments.current_index();
+    // Get the segment index for the current time
+    let idx = segments.current_index();
 
     // Set the Wallpaper
-    let wallpaper = &wallpapers[segment];
+    let wallpaper = &wallpapers[idx];
     wallpaper::set(wallpaper).unwrap();
     println!(
         "Wallpaper set to: {} for ({})",
         wallpaper.to_str().unwrap(),
-        segments[segment]
+        segments[idx]
     );
 }
 
