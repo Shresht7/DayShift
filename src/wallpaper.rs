@@ -6,6 +6,9 @@ use winapi::um::winuser;
 
 // TODO: Add support for other platforms
 
+/// Maximum path size in Windows
+const MAX_PATH_SIZE: usize = 260;
+
 // ---
 // GET
 // ---
@@ -14,7 +17,7 @@ use winapi::um::winuser;
 pub fn get() -> Result<String, Box<dyn std::error::Error>> {
     unsafe {
         // Create a buffer to store the wallpaper path (maximum length is 260 in Windows)
-        let buffer: [u16; 260] = std::mem::zeroed();
+        let buffer: [u16; MAX_PATH_SIZE] = std::mem::zeroed();
 
         // Try to get the wallpaper path using the Windows API
         let ok = winuser::SystemParametersInfoW(
