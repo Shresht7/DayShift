@@ -17,7 +17,6 @@ pub fn get_wallpapers(path: &std::path::PathBuf) -> Vec<std::path::PathBuf> {
     for entry in glob::glob(pattern).unwrap() {
         match entry {
             Ok(path) => {
-                println!("Path: {:?}", path);
                 // Check if the path matches the criteria
                 if matches_criteria(&path).unwrap_or(false) {
                     wallpapers.push(path);
