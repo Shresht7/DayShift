@@ -19,10 +19,21 @@ pub fn get() -> Result<String, Box<dyn std::error::Error>> {
 
 /// Set the wallpaper
 pub fn set(args: Vec<String>) -> Result<String, Box<dyn std::error::Error>> {
+    let mut args = args;
+
     // Validate arguments
     if args.len() < 3 {
         return Err("Error: No path provided\nUsage: dayshift set <path>".into());
     }
+
+    // Check for the `--dry-run` flag, and remove it from the arguments
+    let is_dry_run = if args.contains(&String::from("--dry-run")) {
+        let idx = args.iter().position(|arg| arg == "--dry-run").unwrap();
+        args.remove(idx);
+        true
+    } else {
+        false
+    };
 
     // Extract the path from the arguments
     let path = std::path::PathBuf::from(&args[2]);
@@ -35,8 +46,12 @@ pub fn set(args: Vec<String>) -> Result<String, Box<dyn std::error::Error>> {
     // Check if the path is an image file
     if helpers::is_image_file(&path) {
         // Set the image file as the wallpaper and exit early
+        let msg = format!("Wallpaper set to: {}", &args[2]);
+        if is_dry_run {
+            return Ok(format!("Dry Run: {}", msg));
+        }
         wallpaper::set(&path)?;
-        return Ok(format!("Wallpaper set to: {}", &args[2]));
+        return Ok(msg);
     }
 
     // Check if the path is a directory
@@ -59,8 +74,12 @@ pub fn set(args: Vec<String>) -> Result<String, Box<dyn std::error::Error>> {
 
     // Set the Wallpaper
     let wallpaper = &wallpapers[idx];
+    let msg = format!("Wallpaper set to: {}", wallpaper.display());
+    if is_dry_run {
+        return Ok(format!("Dry Run: {}", msg));
+    }
     wallpaper::set(wallpaper)?;
-    return Ok(format!("Wallpaper set to: {}", wallpaper.display()));
+    return Ok(msg);
 }
 
 // -------
@@ -134,7 +153,12 @@ mod tests {
         // Load the theme path from the .env file
         dotenv::dotenv().ok();
         let path = std::env::var("THEME_PATH").unwrap();
-        let args = vec![String::from("dayshift"), String::from("set"), path];
+        let args = vec![
+            String::from("dayshift"),
+            String::from("set"),
+            String::from("--dry-run"),
+            path,
+        ];
         let result = set(args);
         assert!(result.is_ok());
     }
