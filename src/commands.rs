@@ -39,7 +39,7 @@ pub fn set(args: Vec<String>) {
     if helpers::is_image_file(&path) {
         // Set the image file as the wallpaper and exit early
         wallpaper::set(&path).unwrap();
-        println!("Wallpaper set to: {}", &path.to_str().unwrap());
+        println!("Wallpaper set to: {}", &args[2]);
         std::process::exit(0);
     }
 
