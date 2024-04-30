@@ -9,9 +9,8 @@ use crate::wallpaper;
 // ---
 
 /// Get the current wallpaper path
-pub fn get() {
-    let filepath = wallpaper::get().unwrap();
-    println!("{}", filepath);
+pub fn get() -> Result<String, Box<dyn std::error::Error>> {
+    wallpaper::get()
 }
 
 // ---
@@ -19,11 +18,10 @@ pub fn get() {
 // ---
 
 /// Set the wallpaper
-pub fn set(args: Vec<String>) {
+pub fn set(args: Vec<String>) -> Result<String, Box<dyn std::error::Error>> {
     // Validate arguments
     if args.len() < 3 {
-        eprintln!("Usage: {} set <path>", args[0]);
-        std::process::exit(1);
+        return Err("Error: No path provided\nUsage: dayshift set <path>".into());
     }
 
     // Extract the path from the arguments
@@ -31,26 +29,23 @@ pub fn set(args: Vec<String>) {
 
     // Check if the path exists
     if !path.exists() {
-        eprintln!("Error: Path does not exist - {}", &args[2]);
-        std::process::exit(1);
+        return Err(format!("Error: Path does not exist - {}", &args[2]).into());
     }
 
     // Check if the path is an image file
     if helpers::is_image_file(&path) {
         // Set the image file as the wallpaper and exit early
-        wallpaper::set(&path).unwrap();
-        println!("Wallpaper set to: {}", &args[2]);
-        std::process::exit(0);
+        wallpaper::set(&path)?;
+        return Ok(format!("Wallpaper set to: {}", &args[2]));
     }
 
     // Check if the path is a directory
     if !path.is_dir() {
-        eprintln!("Error: Path is not a directory - {}", &args[2]);
-        std::process::exit(1);
+        return Err(format!("Error: Path is not a directory - {}", &args[2]).into());
     }
 
     // Read the theme config file
-    let config = theme::Config::read(&path).unwrap();
+    let config = theme::Config::read(&path)?;
 
     // Retrieve the wallpapers from the directory
     let wallpapers = helpers::get_wallpapers(&config.path);
@@ -64,12 +59,8 @@ pub fn set(args: Vec<String>) {
 
     // Set the Wallpaper
     let wallpaper = &wallpapers[idx];
-    wallpaper::set(wallpaper).unwrap();
-    println!(
-        "Wallpaper set to: {} for ({})",
-        wallpaper.to_str().unwrap(),
-        segments[idx]
-    );
+    wallpaper::set(wallpaper)?;
+    return Ok(format!("Wallpaper set to: {}", wallpaper.display()));
 }
 
 // -------
@@ -77,10 +68,9 @@ pub fn set(args: Vec<String>) {
 // -------
 
 /// Unknown command handler
-pub fn unknown(command: &str) {
-    eprintln!("Error: Unknown command '{}'\n", command);
-    help();
-    std::process::exit(1);
+pub fn unknown(command: &str) -> Result<String, Box<dyn std::error::Error>> {
+    let msg = format!("Error: Unknown command - {}", command);
+    Err(format!("{}\n{}", msg, help()?).into())
 }
 
 // ----
@@ -88,7 +78,7 @@ pub fn unknown(command: &str) {
 // ----
 
 /// Display the help message
-pub fn help() {
+pub fn help() -> Result<String, Box<dyn std::error::Error>> {
     let msg = r#"
 Usage: dayshift <command> <args...>
 
@@ -111,7 +101,7 @@ Examples:
 Note:
     The 'set' command requires a valid directory path containing wallpapers.
 "#;
-    println!("{}", msg);
+    Ok(String::from(msg))
 }
 
 // -------
@@ -119,6 +109,6 @@ Note:
 // -------
 
 /// Display the version number
-pub fn version() {
-    println!("{}", env!("CARGO_PKG_VERSION"));
+pub fn version() -> Result<String, Box<dyn std::error::Error>> {
+    Ok(format!("{}", env!("CARGO_PKG_VERSION")))
 }

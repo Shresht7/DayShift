@@ -14,10 +14,24 @@ fn main() {
     // Read the command line arguments
     let args: Vec<String> = std::env::args().collect();
 
+    // Run the application
+    match run(args) {
+        Ok(msg) => {
+            println!("{}", msg);
+        }
+        Err(err) => {
+            eprintln!("{}", err);
+            std::process::exit(1);
+        }
+    }
+}
+
+/// Run the command-line application
+fn run(args: Vec<String>) -> Result<String, Box<dyn std::error::Error>> {
     // Validate arguments
     if args.len() < 2 {
-        commands::help();
-        std::process::exit(1);
+        commands::help()?;
+        return Err("Error: No command provided".into());
     }
 
     // Extract the command from the arguments
@@ -36,6 +50,6 @@ fn main() {
         "--version" => commands::version(),
         "-v" => commands::version(),
 
-        _ => commands::unknown(&command),
+        _ => commands::unknown(command),
     }
 }
