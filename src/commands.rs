@@ -43,7 +43,13 @@ pub fn set(args: Vec<String>) {
         std::process::exit(0);
     }
 
-    // Read the config file
+    // Check if the path is a directory
+    if !path.is_dir() {
+        eprintln!("Error: Path is not a directory - {}", &args[2]);
+        std::process::exit(1);
+    }
+
+    // Read the theme config file
     let config = theme::Config::read(&path).unwrap();
 
     // Retrieve the wallpapers from the directory
