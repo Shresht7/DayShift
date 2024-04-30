@@ -1,6 +1,6 @@
 // Library
-use crate::config;
 use crate::helpers;
+use crate::theme;
 use crate::time::{self, CurrentSegment};
 use crate::wallpaper;
 
@@ -44,7 +44,7 @@ pub fn set(args: Vec<String>) {
     }
 
     // Read the config file
-    let config = config::Config::read(&path).unwrap();
+    let config = theme::Config::read(&path).unwrap();
 
     // Retrieve the wallpapers from the directory
     let wallpapers = helpers::get_wallpapers(&config.path);

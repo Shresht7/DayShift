@@ -1,7 +1,7 @@
 // Library
 mod commands;
-mod config;
 mod helpers;
+mod theme;
 mod time;
 mod wallpaper;
 
