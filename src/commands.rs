@@ -112,3 +112,49 @@ Note:
 pub fn version() -> Result<String, Box<dyn std::error::Error>> {
     Ok(format!("{}", env!("CARGO_PKG_VERSION")))
 }
+
+// -----
+// TESTS
+// -----
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get() {
+        let result = get();
+        assert!(&result.is_ok());
+        let path = std::path::PathBuf::from(&result.unwrap());
+        assert!(path.exists());
+    }
+
+    #[test]
+    fn test_set() {
+        // Load the theme path from the .env file
+        dotenv::dotenv().ok();
+        let path = std::env::var("THEME_PATH").unwrap();
+        let args = vec![String::from("dayshift"), String::from("set"), path];
+        let result = set(args);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_unknown() {
+        let result = unknown("unknown");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_help() {
+        let result = help();
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_version() {
+        let result = version();
+        assert!(result.is_ok());
+        assert!(result.unwrap() == env!("CARGO_PKG_VERSION"))
+    }
+}
