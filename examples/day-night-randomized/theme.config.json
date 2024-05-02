@@ -1,0 +1,14 @@
+[
+    {
+        "start": "06:00",
+        "duration": 12,
+        "path": "day/*.png",
+        "selection": "random"
+    },
+    {
+        "start": "18:00",
+        "duration": 12,
+        "path": "night/*.png",
+        "selection": "random"
+    }
+]

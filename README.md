@@ -23,7 +23,7 @@ While you don't need to provide a configuration file, you can create a `dayshift
         "start": "08:00",
         "duration": 12,
         "path": "day/*.png",
-        "mode": "sequential"
+        "mode": "random"
     },
     {
         "start": "20:00",
@@ -46,6 +46,10 @@ You can create as many time-frames as you want!
 - `mode`: The mode to use when selecting wallpapers. The following modes are available:
   - `random`: Select a random wallpaper from the directory.
   - `sequential`: Select wallpapers in order from the directory.
+
+### Examples
+
+See the [examples](examples) directory for example configurations.
 
 ## 📄 License
 
